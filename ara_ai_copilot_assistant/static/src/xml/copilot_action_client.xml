@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ara_ai_copilot_assistant.Workspace">
+        <div class="ara-copilot-action-workspace">
+
+            <!-- Left Sidebar -->
+            <div class="ara-copilot-sidebar">
+                <div class="ara-brand-emblem-badge">
+                    <svg class="ara-bot-icon text-primary" viewBox="0 0 24 24">
+                        <path d="M12 2v3"/>
+                        <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                        <rect x="4" y="6" width="16" height="13" rx="4"/>
+                        <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                        <line x1="9" y1="16" x2="15" y2="16"/>
+                        <path d="M2 11v3"/>
+                        <path d="M22 11v3"/>
+                    </svg>
+                    <span class="ara-brand-title">ARA COPILOT</span>
+                </div>
+
+                <button class="ara-new-chat-btn" t-on-click="onNewChat">
+                    <i class="fa fa-plus"/>
+                    <span>New Chat</span>
+                </button>
+
+                <!-- Search Chat History -->
+                <div class="ara-sidebar-search-box">
+                    <i class="fa fa-search ara-search-icon"/>
+                    <input
+                        type="text"
+                        class="ara-sidebar-search-input"
+                        placeholder="Search history..."
+                        t-att-value="state.searchQuery"
+                        t-on-input="onSearchInput"
+                    />
+                    <i t-if="state.searchQuery" class="fa fa-times ara-search-clear" t-on-click="clearSearch" title="Clear"/>
+                </div>
+
+                <!-- Favorite Filter Bar -->
+                <div class="ara-sidebar-filter-bar">
+                    <button t-attf-class="ara-filter-pill #{!state.showOnlyFavorites ? 'active' : ''}"
+                            t-on-click="() => this.setFilterFavorites(false)">
+                        All (<t t-esc="state.threads.length"/>)
+                    </button>
+                    <button t-attf-class="ara-filter-pill #{state.showOnlyFavorites ? 'active' : ''}"
+                            t-on-click="() => this.setFilterFavorites(true)">
+                        <i class="fa fa-star text-warning me-1"/> Starred (<t t-esc="this.favoriteCount"/>)
+                    </button>
+                </div>
+
+                <div class="ara-thread-list">
+                    <t t-if="this.displayedThreads.length">
+                        <t t-foreach="this.displayedThreads" t-as="thread" t-key="thread.id">
+                            <div
+                                t-attf-class="ara-thread-item #{thread.id === state.activeThreadId ? 'active' : ''}"
+                                t-on-click="() => this.onSelectThread(thread.id)"
+                            >
+                                <span class="ara-thread-title" t-esc="thread.name"/>
+                                <div class="ara-thread-item-actions">
+                                    <button t-attf-class="ara-thread-star-btn #{thread.is_favorite ? 'starred' : ''}"
+                                            t-att-title="thread.is_favorite ? 'Remove from favorites' : 'Mark as favorite'"
+                                            t-on-click.stop="(ev) => this.onToggleFavorite(ev, thread.id)">
+                                        <i t-attf-class="fa #{thread.is_favorite ? 'fa-star' : 'fa-star-o'}"/>
+                                    </button>
+                                    <button class="ara-thread-del-btn" title="Delete Chat Session" t-on-click.stop="(ev) => this.onDeleteThread(ev, thread.id)">
+                                        <i class="fa fa-trash"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <div t-else="" class="ara-no-threads-found">
+                        <i class="fa fa-search mb-2" style="font-size: 16px; opacity: 0.4;"/>
+                        <span t-if="state.searchQuery">No chats matching "<t t-esc="state.searchQuery"/>"</span>
+                        <span t-elif="state.showOnlyFavorites">No favorite chats yet</span>
+                        <span t-else="">No conversations yet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Chat Workspace -->
+            <div class="ara-copilot-main-chat">
+                <CopilotChatWindow threadId="state.activeThreadId" isDrawer="false" onThreadUpdated="() => this.loadThreads()"/>
+            </div>
+
+        </div>
+    </t>
+
+</templates>

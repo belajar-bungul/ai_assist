@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action Client for Fullscreen Copilot Workspace -->
+    <record id="action_ara_ai_copilot_main" model="ir.actions.client">
+        <field name="name">AI Copilot Workspace</field>
+        <field name="tag">ara_ai_copilot_main</field>
+        <field name="target">main</field>
+    </record>
+
+    <!-- Top Menu -->
+    <menuitem id="menu_ara_ai_copilot_root"
+              name="Ara AI Copilot"
+              web_icon="ara_ai_copilot_assistant,static/description/icon.png"
+              sequence="2"/>
+
+    <!-- Workspace Submenu -->
+    <menuitem id="menu_ara_ai_copilot_workspace"
+              name="AI Workspace"
+              parent="menu_ara_ai_copilot_root"
+              action="action_ara_ai_copilot_main"
+              sequence="10"/>
+
+    <!-- Management Submenu -->
+    <menuitem id="menu_ara_ai_copilot_management"
+              name="History &amp; Auditing"
+              parent="menu_ara_ai_copilot_root"
+              sequence="20"/>
+
+    <menuitem id="menu_ara_ai_copilot_threads"
+              name="Conversation History"
+              parent="menu_ara_ai_copilot_management"
+              action="action_ai_copilot_thread"
+              sequence="10"/>
+
+    <menuitem id="menu_ara_ai_copilot_audit"
+              name="Audit Trail"
+              parent="menu_ara_ai_copilot_management"
+              action="action_ai_copilot_audit"
+              sequence="20"/>
+
+    <!-- Configuration Submenu -->
+    <menuitem id="menu_ara_ai_copilot_config"
+              name="Configuration"
+              parent="menu_ara_ai_copilot_root"
+              groups="group_ai_copilot_manager"
+              sequence="30"/>
+
+    <menuitem id="menu_ara_ai_copilot_providers"
+              name="AI Providers"
+              parent="menu_ara_ai_copilot_config"
+              action="action_ai_copilot_provider"
+              sequence="10"/>
+</odoo>

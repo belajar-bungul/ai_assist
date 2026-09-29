@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Audit Trail List View -->
+    <record id="view_ai_copilot_audit_tree" model="ir.ui.view">
+        <field name="name">ai.copilot.audit.list</field>
+        <field name="model">ai.copilot.audit</field>
+        <field name="arch" type="xml">
+            <list string="Audit Trail Log" decoration-success="status == 'success'" decoration-danger="status == 'failed'" decoration-warning="status == 'rejected'">
+                <field name="create_date" string="Timestamp"/>
+                <field name="user_id"/>
+                <field name="action_type" widget="badge"/>
+                <field name="model_name"/>
+                <field name="res_id"/>
+                <field name="summary"/>
+                <field name="status" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Audit Trail Form View -->
+    <record id="view_ai_copilot_audit_form" model="ir.ui.view">
+        <field name="name">ai.copilot.audit.form</field>
+        <field name="model">ai.copilot.audit</field>
+        <field name="arch" type="xml">
+            <form string="AI Action Audit Record" create="0" edit="0">
+                <sheet>
+                    <group>
+                        <group string="Action Details">
+                            <field name="create_date" string="Executed At"/>
+                            <field name="user_id"/>
+                            <field name="action_type"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Target Record">
+                            <field name="model_name"/>
+                            <field name="res_id"/>
+                            <field name="summary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Execution Output">
+                            <field name="result" widget="text"/>
+                        </page>
+                        <page string="Proposal Payload">
+                            <field name="payload" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="Error Log" invisible="not error_message">
+                            <field name="error_message" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ai_copilot_audit" model="ir.actions.act_window">
+        <field name="name">AI Audit Trail</field>
+        <field name="res_model">ai.copilot.audit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

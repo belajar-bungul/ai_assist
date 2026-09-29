@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Google Gemini Provider (Default) -->
+        <record id="provider_google_gemini" model="ai.copilot.provider">
+            <field name="name">Google Gemini (Recommended)</field>
+            <field name="provider_type">gemini</field>
+            <field name="model">gemini-flash-latest</field>
+            <field name="api_base">https://generativelanguage.googleapis.com/v1beta/openai</field>
+            <field name="temperature">0.2</field>
+            <field name="max_tokens">4096</field>
+            <field name="is_default">True</field>
+            <field name="is_active">True</field>
+            <field name="supports_multimodal">True</field>
+            <field name="supports_tools">True</field>
+        </record>
+
+        <!-- OpenAI Provider -->
+        <record id="provider_openai" model="ai.copilot.provider">
+            <field name="name">OpenAI</field>
+            <field name="provider_type">openai</field>
+            <field name="model">gpt-4o</field>
+            <field name="api_base">https://api.openai.com/v1</field>
+            <field name="temperature">0.2</field>
+            <field name="max_tokens">4096</field>
+            <field name="is_default">False</field>
+            <field name="is_active">True</field>
+            <field name="supports_multimodal">True</field>
+            <field name="supports_tools">True</field>
+        </record>
+
+        <!-- Anthropic Claude Provider -->
+        <record id="provider_claude" model="ai.copilot.provider">
+            <field name="name">Anthropic Claude</field>
+            <field name="provider_type">claude</field>
+            <field name="model">claude-3-7-sonnet-20250219</field>
+            <field name="api_base">https://api.anthropic.com/v1</field>
+            <field name="temperature">0.2</field>
+            <field name="max_tokens">4096</field>
+            <field name="is_default">False</field>
+            <field name="is_active">True</field>
+            <field name="supports_multimodal">True</field>
+            <field name="supports_tools">True</field>
+        </record>
+
+        <!-- OpenRouter Provider (100+ Models) -->
+        <record id="provider_openrouter" model="ai.copilot.provider">
+            <field name="name">OpenRouter (100+ Models)</field>
+            <field name="provider_type">openrouter</field>
+            <field name="model">deepseek/deepseek-r1</field>
+            <field name="api_base">https://openrouter.ai/api/v1</field>
+            <field name="temperature">0.2</field>
+            <field name="max_tokens">4096</field>
+            <field name="is_default">False</field>
+            <field name="is_active">True</field>
+            <field name="supports_multimodal">True</field>
+            <field name="supports_tools">True</field>
+        </record>
+
+        <!-- NVIDIA NIM Provider -->
+        <record id="provider_nvidia" model="ai.copilot.provider">
+            <field name="name">NVIDIA NIM</field>
+            <field name="provider_type">nvidia</field>
+            <field name="model">meta/llama-3.1-70b-instruct</field>
+            <field name="api_base">https://integrate.api.nvidia.com/v1</field>
+            <field name="temperature">0.2</field>
+            <field name="max_tokens">4096</field>
+            <field name="is_default">False</field>
+            <field name="is_active">True</field>
+            <field name="supports_multimodal">True</field>
+            <field name="supports_tools">True</field>
+        </record>
+    </data>
+</odoo>

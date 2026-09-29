@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_copilot_provider_user,ai.copilot.provider.user,model_ai_copilot_provider,group_ai_copilot_user,1,0,0,0
+access_ai_copilot_provider_mgr,ai.copilot.provider.mgr,model_ai_copilot_provider,group_ai_copilot_manager,1,1,1,1
+access_ai_copilot_thread_user,ai.copilot.thread.user,model_ai_copilot_thread,group_ai_copilot_user,1,1,1,1
+access_ai_copilot_thread_mgr,ai.copilot.thread.mgr,model_ai_copilot_thread,group_ai_copilot_manager,1,1,1,1
+access_ai_copilot_message_user,ai.copilot.message.user,model_ai_copilot_message,group_ai_copilot_user,1,1,1,1
+access_ai_copilot_message_mgr,ai.copilot.message.mgr,model_ai_copilot_message,group_ai_copilot_manager,1,1,1,1
+access_ai_copilot_audit_user,ai.copilot.audit.user,model_ai_copilot_audit,group_ai_copilot_user,1,0,0,0
+access_ai_copilot_audit_mgr,ai.copilot.audit.mgr,model_ai_copilot_audit,group_ai_copilot_manager,1,1,1,1
+access_ai_copilot_knowledge_user,ai.copilot.knowledge.user,model_ai_copilot_knowledge,group_ai_copilot_user,1,1,1,0
+access_ai_copilot_knowledge_mgr,ai.copilot.knowledge.mgr,model_ai_copilot_knowledge,group_ai_copilot_manager,1,1,1,1

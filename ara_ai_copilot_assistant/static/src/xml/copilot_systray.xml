@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ara_ai_copilot_assistant.SystrayItem">
+        <div class="ara-copilot-systray-item">
+            <button class="ara-copilot-systray-btn" title="Open AI Copilot Assistant" t-on-click="onOpenWorkspace">
+                <span class="ara-copilot-pulse-dot"/>
+                <svg class="ara-bot-icon" viewBox="0 0 24 24">
+                    <path d="M12 2v3"/>
+                    <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                    <rect x="4" y="6" width="16" height="13" rx="4"/>
+                    <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                    <line x1="9" y1="16" x2="15" y2="16"/>
+                    <path d="M2 11v3"/>
+                    <path d="M22 11v3"/>
+                </svg>
+                <span>Ara Copilot</span>
+            </button>
+        </div>
+    </t>
+
+</templates>

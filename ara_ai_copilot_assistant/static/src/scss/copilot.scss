@@ -1,0 +1,1259 @@
+/* ==========================================================================
+   ARA AI COPILOT ASSISTANT - PORCELAIN PASTEL LUXURY THEME
+   Inspired by Ara Dashboard (Pastel Blush Pink & Warm Butter Yellow)
+   ========================================================================== */
+
+:root {
+    --ara-copilot-bg-body: #FFF7F8;
+    --ara-copilot-bg-surface: rgba(255, 255, 255, 0.90);
+    --ara-copilot-bg-surface-elevated: #FFFFFF;
+    --ara-copilot-bg-surface-hover: rgba(255, 255, 255, 0.98);
+    --ara-copilot-accent-primary: #7B68EE;
+    --ara-copilot-accent-violet: #8F55FF;
+    --ara-copilot-accent-pink: #F472B6;
+    --ara-copilot-accent-glow: rgba(244, 114, 182, 0.28);
+    --ara-copilot-accent-gradient: linear-gradient(135deg, #F472B6 0%, #7B68EE 100%);
+    --ara-copilot-text-pure: #1E293B;
+    --ara-copilot-text-secondary: #475569;
+    --ara-copilot-text-muted: #64748B;
+    --ara-copilot-border-subtle: rgba(0, 0, 0, 0.08);
+    --ara-copilot-border-highlight: rgba(255, 255, 255, 0.95);
+    --ara-copilot-shadow-card: 0 10px 25px -5px rgba(244, 114, 182, 0.12), 0 8px 10px -6px rgba(123, 104, 238, 0.08);
+}
+
+/* Global Robot / Bot Icon Styling */
+.ara-bot-icon {
+    width: 1.15em;
+    height: 1.15em;
+    display: inline-block;
+    vertical-align: middle;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* -------------------------------------------------------------------------
+   SYSTRAY ICON & TRIGGER
+   ------------------------------------------------------------------------- */
+.ara-copilot-systray-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 8px;
+    height: 100%;
+
+    .ara-copilot-systray-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, rgba(244, 114, 182, 0.15) 0%, rgba(123, 104, 238, 0.15) 100%);
+        border: 1px solid rgba(244, 114, 182, 0.4);
+        border-radius: 20px;
+        padding: 4px 11px;
+        font-weight: 700;
+        font-size: 12px;
+        color: #7C3AED;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(244, 114, 182, 0.15);
+
+        .ara-bot-icon {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+        }
+
+        .ara-copilot-pulse-dot {
+            width: 7px;
+            height: 7px;
+            background: #10B981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10B981;
+            animation: araPulse 2s infinite;
+        }
+
+        &:hover {
+            background: var(--ara-copilot-accent-gradient);
+            color: #FFFFFF;
+            border-color: transparent;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px var(--ara-copilot-accent-glow);
+
+            .ara-copilot-pulse-dot {
+                background: #FFFFFF;
+                box-shadow: 0 0 8px #FFFFFF;
+            }
+        }
+    }
+}
+
+@keyframes araPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* -------------------------------------------------------------------------
+   FLOATING COPILOT DRAWER (Systray Overlay)
+   ------------------------------------------------------------------------- */
+.ara-copilot-drawer {
+    position: fixed;
+    top: 48px;
+    right: 16px;
+    width: 440px;
+    height: calc(100vh - 64px);
+    max-height: 850px;
+    z-index: 1050;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(123, 104, 238, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: araSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background:
+        radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.5) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(254, 240, 138, 0.6) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(252, 231, 243, 0.55) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(254, 249, 195, 0.6) 0px, transparent 50%),
+        #FFF7F8;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    @media (max-width: 768px) {
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+}
+
+@keyframes araSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* -------------------------------------------------------------------------
+   FULLSCREEN COPILOT WORKSPACE ACTION
+   ------------------------------------------------------------------------- */
+.ara-copilot-action-workspace {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background:
+        radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.45) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(254, 240, 138, 0.55) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(252, 231, 243, 0.5) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(254, 249, 195, 0.55) 0px, transparent 50%),
+        #FFF7F8;
+    font-family: inherit;
+    color: var(--ara-copilot-text-pure);
+
+    .ara-copilot-sidebar {
+        width: 290px;
+        flex-shrink: 0;
+        border-right: 1px solid var(--ara-copilot-border-subtle);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        padding: 18px 16px;
+        box-sizing: border-box;
+
+        .ara-brand-emblem-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(244, 114, 182, 0.35);
+            border-radius: 9999px;
+            box-shadow: 0 2px 10px rgba(244, 114, 182, 0.15);
+            margin-bottom: 18px;
+
+            .ara-bot-icon {
+                width: 18px;
+                height: 18px;
+                stroke: #7C3AED;
+            }
+
+            .ara-brand-title {
+                font-weight: 800;
+                font-size: 13px;
+                letter-spacing: 1.5px;
+                background: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+
+        .ara-new-chat-btn {
+            background: var(--ara-copilot-accent-gradient);
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 13px;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 16px;
+            cursor: pointer;
+            box-shadow: 0 3px 12px var(--ara-copilot-accent-glow);
+            transition: transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+
+            &:hover {
+                transform: translateY(-1px);
+            }
+        }
+
+        .ara-sidebar-search-box {
+            position: relative;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+
+            .ara-search-icon {
+                position: absolute;
+                left: 11px;
+                color: #94A3B8;
+                font-size: 11px;
+                pointer-events: none;
+            }
+
+            .ara-sidebar-search-input {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.85);
+                border: 1px solid rgba(244, 114, 182, 0.25);
+                border-radius: 12px;
+                padding: 7px 28px 7px 30px;
+                font-size: 12px;
+                color: var(--ara-copilot-text-pure);
+                outline: none;
+                transition: all 0.2s ease;
+
+                &:focus {
+                    background: #FFFFFF;
+                    border-color: #7C3AED;
+                    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+                }
+
+                &::placeholder {
+                    color: #94A3B8;
+                    font-size: 11.5px;
+                }
+            }
+
+            .ara-search-clear {
+                position: absolute;
+                right: 9px;
+                color: #94A3B8;
+                font-size: 12px;
+                cursor: pointer;
+                padding: 2px;
+                transition: color 0.15s ease;
+
+                &:hover {
+                    color: #EF4444;
+                }
+            }
+        }
+
+        .ara-sidebar-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 3px;
+            border-radius: 10px;
+            border: 1px solid rgba(244, 114, 182, 0.2);
+
+            .ara-filter-pill {
+                flex: 1;
+                border: none;
+                background: transparent;
+                padding: 5px 8px;
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--ara-copilot-text-muted);
+                border-radius: 7px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &:hover {
+                    color: var(--ara-copilot-text-pure);
+                }
+
+                &.active {
+                    background: #FFFFFF;
+                    color: #7C3AED;
+                    box-shadow: 0 1px 4px rgba(123, 104, 238, 0.15);
+                }
+            }
+        }
+
+        .ara-thread-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            .ara-no-threads-found {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 30px 12px;
+                color: var(--ara-copilot-text-muted);
+                font-size: 11.5px;
+                text-align: center;
+            }
+
+            .ara-thread-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 10px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 13px;
+                color: var(--ara-copilot-text-secondary);
+                transition: all 0.15s ease;
+                background: rgba(255, 255, 255, 0.4);
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.85);
+                    color: var(--ara-copilot-text-pure);
+
+                    .ara-thread-item-actions .ara-thread-del-btn {
+                        opacity: 1;
+                    }
+                    .ara-thread-item-actions .ara-thread-star-btn {
+                        opacity: 1;
+                    }
+                }
+
+                &.active {
+                    background: #FFFFFF;
+                    color: #7C3AED;
+                    font-weight: 700;
+                    box-shadow: 0 2px 8px rgba(123, 104, 238, 0.15);
+                    border: 1px solid rgba(244, 114, 182, 0.3);
+
+                    .ara-thread-item-actions .ara-thread-del-btn {
+                        opacity: 0.7;
+                    }
+                }
+
+                .ara-thread-title {
+                    flex: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: calc(100% - 60px);
+                    font-weight: 500;
+                }
+
+                .ara-thread-item-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                    flex-shrink: 0;
+
+                    .ara-thread-star-btn {
+                        background: none;
+                        border: none;
+                        color: #CBD5E1;
+                        padding: 4px;
+                        border-radius: 6px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        font-size: 12px;
+                        opacity: 0.6;
+                        transition: all 0.2s ease;
+
+                        &:hover {
+                            color: #F59E0B;
+                            transform: scale(1.15);
+                            opacity: 1;
+                        }
+
+                        &.starred {
+                            color: #F59E0B;
+                            opacity: 1;
+                        }
+                    }
+
+                    .ara-thread-del-btn {
+                        background: none;
+                        border: none;
+                        color: #94A3B8;
+                        padding: 4px 6px;
+                        border-radius: 6px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        opacity: 0.65;
+                        transition: all 0.2s ease;
+                        cursor: pointer;
+                        font-size: 12px;
+
+                        &:hover {
+                            color: #EF4444 !important;
+                            background: rgba(239, 68, 68, 0.15);
+                            transform: scale(1.15);
+                            opacity: 1 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .ara-copilot-main-chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   CHAT CORE STYLING (Used in both Drawer and Fullscreen)
+   ------------------------------------------------------------------------- */
+.ara-copilot-chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    /* Header */
+    .ara-copilot-header {
+        padding: 12px 18px;
+        background: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid var(--ara-copilot-border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+
+        .ara-copilot-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .ara-copilot-avatar {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+                background: var(--ara-copilot-accent-gradient);
+                color: #FFFFFF;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                box-shadow: 0 2px 8px var(--ara-copilot-accent-glow);
+
+                .ara-bot-icon {
+                    width: 18px;
+                    height: 18px;
+                    stroke: #FFFFFF;
+                }
+            }
+
+            .ara-copilot-details {
+                display: flex;
+                flex-direction: column;
+
+                .ara-copilot-name {
+                    font-size: 14px;
+                    font-weight: 800;
+                    color: var(--ara-copilot-text-pure);
+                    line-height: 1.2;
+                }
+
+                .ara-model-selector-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.25);
+                    border-radius: 8px;
+                    padding: 2px 8px;
+                    margin-top: 2px;
+                    max-width: 250px;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        background: rgba(124, 58, 237, 0.12);
+                        border-color: rgba(124, 58, 237, 0.4);
+                    }
+
+                    .ara-model-bolt-icon {
+                        color: #7C3AED;
+                        font-size: 11px;
+                        flex-shrink: 0;
+                    }
+
+                    .ara-model-select {
+                        background: transparent;
+                        border: none;
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: #6D28D9;
+                        cursor: pointer;
+                        outline: none;
+                        padding: 1px 0;
+                        width: 100%;
+                        text-overflow: ellipsis;
+
+                        option {
+                            background: #FFFFFF;
+                            color: #1E293B;
+                            font-size: 12px;
+                        }
+                    }
+                }
+
+                .ara-copilot-model-badge {
+                    font-size: 10px;
+                    color: #7C3AED;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .ara-copilot-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .ara-header-btn {
+                background: rgba(255, 255, 255, 0.9);
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                color: var(--ara-copilot-text-muted);
+                width: 30px;
+                height: 30px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.15s ease;
+
+                &:hover {
+                    color: var(--ara-copilot-text-pure);
+                    background: #FFFFFF;
+                    border-color: rgba(244, 114, 182, 0.4);
+                }
+
+                &.ara-star-header-btn {
+                    &.active-star {
+                        color: #F59E0B !important;
+                        background: rgba(245, 158, 11, 0.12) !important;
+                        border-color: rgba(245, 158, 11, 0.3) !important;
+                    }
+
+                    &:hover {
+                        color: #F59E0B;
+                        background: rgba(245, 158, 11, 0.1);
+                    }
+                }
+
+                &.ara-delete-header-btn {
+                    &:hover {
+                        color: #EF4444;
+                        background: rgba(239, 68, 68, 0.1);
+                        border-color: rgba(239, 68, 68, 0.3);
+                    }
+                }
+            }
+        }
+    }
+
+    /* Current Context Bar */
+    .ara-context-pill-bar {
+        padding: 6px 18px;
+        background: rgba(254, 240, 138, 0.35);
+        border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+        font-size: 11px;
+        color: #92400E;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+
+        i {
+            color: #F59E0B;
+        }
+
+        .ara-context-tag {
+            background: #FFFFFF;
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+    }
+
+    /* Messages Scroll Area */
+    .ara-copilot-messages-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        scroll-behavior: smooth;
+
+        /* Empty State / Quick Starters */
+        .ara-copilot-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            text-align: center;
+            max-width: 420px;
+
+            .ara-empty-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 64px;
+                height: 64px;
+                border-radius: 20px;
+                background: linear-gradient(135deg, rgba(244, 114, 182, 0.2) 0%, rgba(123, 104, 238, 0.2) 100%);
+                border: 1px solid rgba(244, 114, 182, 0.4);
+                box-shadow: 0 6px 20px rgba(123, 104, 238, 0.15);
+                margin-bottom: 14px;
+
+                .ara-bot-icon {
+                    width: 34px;
+                    height: 34px;
+                    stroke: #7C3AED;
+                }
+            }
+
+            h3 {
+                font-size: 18px;
+                font-weight: 800;
+                margin-bottom: 6px;
+                background: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            p {
+                font-size: 12px;
+                color: var(--ara-copilot-text-muted);
+                margin-bottom: 18px;
+                line-height: 1.5;
+            }
+
+            .ara-quick-starters {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
+
+                .ara-starter-chip {
+                    background: rgba(255, 255, 255, 0.85);
+                    border: 1px solid rgba(244, 114, 182, 0.35);
+                    border-radius: 12px;
+                    padding: 8px 12px;
+                    font-size: 12px;
+                    color: var(--ara-copilot-text-pure);
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+                    &:hover {
+                        background: #FFFFFF;
+                        border-color: #7B68EE;
+                        color: #7C3AED;
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(123, 104, 238, 0.15);
+                    }
+                }
+            }
+        }
+
+        /* Message Item */
+        .ara-message-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+
+            &.user {
+                justify-content: flex-end;
+
+                .ara-message-bubble {
+                    background: var(--ara-copilot-accent-gradient);
+                    color: #FFFFFF;
+                    border-radius: 18px 18px 4px 18px;
+                    box-shadow: 0 4px 14px var(--ara-copilot-accent-glow);
+                    max-width: 82%;
+
+                    .ara-msg-text {
+                        color: #FFFFFF;
+                    }
+
+                    .ara-msg-actions-bar {
+                        justify-content: flex-end;
+                        border-top-color: rgba(255, 255, 255, 0.2);
+
+                        .ara-copy-msg-btn {
+                            color: #FFFFFF;
+
+                            &:hover {
+                                background: rgba(255, 255, 255, 0.2);
+                            }
+
+                            .ara-copied-badge {
+                                color: #FFFFFF !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.assistant {
+                justify-content: flex-start;
+
+                .ara-msg-avatar {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 8px;
+                    background: var(--ara-copilot-accent-gradient);
+                    color: #FFFFFF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 14px;
+                    flex-shrink: 0;
+                    box-shadow: 0 2px 6px var(--ara-copilot-accent-glow);
+
+                    .ara-bot-icon {
+                        width: 16px;
+                        height: 16px;
+                        stroke: #FFFFFF;
+                    }
+                }
+
+                .ara-message-bubble {
+                    background: rgba(255, 255, 255, 0.95);
+                    color: var(--ara-copilot-text-pure);
+                    border-radius: 18px 18px 18px 4px;
+                    border: 1px solid rgba(255, 255, 255, 0.8);
+                    box-shadow: var(--ara-copilot-shadow-card);
+                    max-width: 88%;
+
+                    .ara-msg-actions-bar {
+                        justify-content: flex-start;
+                        border-top-color: rgba(0, 0, 0, 0.05);
+
+                        .ara-copy-msg-btn {
+                            color: var(--ara-copilot-text-muted);
+
+                            &:hover {
+                                color: #7C3AED;
+                                background: rgba(124, 58, 237, 0.08);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .ara-message-bubble {
+                padding: 12px 16px;
+                font-size: 13px;
+                line-height: 1.6;
+                position: relative;
+                word-break: break-word;
+
+                .ara-msg-actions-bar {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 6px;
+                    padding-top: 4px;
+
+                    .ara-copy-msg-btn {
+                        background: none;
+                        border: none;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 3px 8px;
+                        border-radius: 6px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        opacity: 0.7;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+
+                        .ara-copy-label {
+                            font-size: 11px;
+                        }
+
+                        .ara-copied-badge {
+                            font-weight: 700;
+                        }
+                    }
+                }
+
+                .ara-msg-text {
+                    &.user-text {
+                        white-space: pre-wrap;
+                        word-break: break-word;
+                    }
+
+                    p {
+                        margin-bottom: 8px;
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    h3, h4, h5 {
+                        margin: 10px 0 6px 0;
+                        font-weight: 700;
+                        color: #4C1D95;
+                    }
+
+                    h5 { font-size: 13px; }
+                    h4 { font-size: 14px; }
+                    h3 { font-size: 15px; }
+
+                    .ara-chat-list {
+                        margin: 6px 0;
+                        padding-left: 18px;
+                        li {
+                            margin-bottom: 4px;
+                        }
+                    }
+
+                    /* Interactive Proof & Record Links */
+                    .ara-chat-link, .ara-record-link {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 3px;
+                        background: rgba(123, 104, 238, 0.12);
+                        color: #6D28D9;
+                        border: 1px solid rgba(123, 104, 238, 0.25);
+                        border-radius: 6px;
+                        padding: 1px 7px;
+                        font-weight: 600;
+                        font-size: 11.5px;
+                        text-decoration: none;
+                        transition: all 0.2s ease;
+                        cursor: pointer;
+
+                        &:hover {
+                            background: var(--ara-copilot-accent-gradient);
+                            color: #FFFFFF;
+                            border-color: transparent;
+                            box-shadow: 0 2px 8px var(--ara-copilot-accent-glow);
+                            transform: translateY(-1px);
+                        }
+                    }
+
+                    .ara-table-wrapper {
+                        overflow-x: auto;
+                        margin: 10px 0;
+                        background: #FFFFFF;
+                        border-radius: 10px;
+                        border: 1px solid rgba(0, 0, 0, 0.08);
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+
+                        .ara-chat-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 12px;
+
+                            th, td {
+                                padding: 7px 10px;
+                                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                                text-align: left;
+                                white-space: nowrap;
+                            }
+
+                            th {
+                                background: linear-gradient(135deg, rgba(244, 114, 182, 0.12) 0%, rgba(123, 104, 238, 0.12) 100%);
+                                color: #6D28D9;
+                                font-weight: 700;
+                                border-bottom: 2px solid rgba(123, 104, 238, 0.2);
+                            }
+
+                            tr:last-child td {
+                                border-bottom: none;
+                            }
+
+                            tr:hover td {
+                                background: rgba(254, 240, 138, 0.15);
+                            }
+                        }
+                    }
+
+                    code {
+                        background: rgba(0, 0, 0, 0.06);
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                        font-family: monospace;
+                        font-size: 12px;
+                        color: #9333EA;
+                    }
+
+                    pre {
+                        background: #1E293B;
+                        color: #E2E8F0;
+                        padding: 10px 12px;
+                        border-radius: 8px;
+                        overflow-x: auto;
+                        font-size: 11px;
+                        margin: 8px 0;
+                    }
+                }
+
+                .ara-msg-attachments {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    margin-top: 8px;
+
+                    .ara-att-pill {
+                        background: rgba(255, 255, 255, 0.8);
+                        border: 1px solid rgba(0, 0, 0, 0.1);
+                        border-radius: 6px;
+                        padding: 3px 8px;
+                        font-size: 11px;
+                        color: #7C3AED;
+                        text-decoration: none;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                }
+            }
+        }
+
+        /* -----------------------------------------------------------------
+           APPROVAL CARD (Safe Execution Preview)
+           ----------------------------------------------------------------- */
+        .ara-approval-card {
+            margin-top: 12px;
+            background: #FFFFFF;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-left: 4px solid #F59E0B;
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+
+            &.approved {
+                border-left-color: #10B981;
+                border-color: rgba(16, 185, 129, 0.3);
+            }
+
+            &.rejected {
+                border-left-color: #EF4444;
+                border-color: rgba(239, 68, 68, 0.3);
+                opacity: 0.8;
+            }
+
+            .ara-approval-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+
+                .ara-approval-title {
+                    font-size: 13px;
+                    font-weight: 700;
+                    color: var(--ara-copilot-text-pure);
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+
+                .ara-approval-status-badge {
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 2px 8px;
+                    border-radius: 6px;
+                    text-transform: uppercase;
+
+                    &.pending {
+                        background: #FEF3C7;
+                        color: #B45309;
+                    }
+                    &.approved {
+                        background: #D1FAE5;
+                        color: #065F46;
+                    }
+                    &.rejected {
+                        background: #FEE2E2;
+                        color: #991B1B;
+                    }
+                }
+            }
+
+            .ara-approval-body {
+                font-size: 12px;
+                color: var(--ara-copilot-text-secondary);
+                margin-bottom: 12px;
+
+                .ara-proof-link {
+                    background: rgba(123, 104, 238, 0.12);
+                    color: #6D28D9;
+                    border: 1px solid rgba(123, 104, 238, 0.3);
+                    border-radius: 6px;
+                    padding: 2px 8px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        background: #7B68EE;
+                        color: #FFFFFF;
+                        transform: translateY(-1px);
+                    }
+                }
+
+                .ara-diff-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 6px;
+
+                    td {
+                        padding: 4px 6px;
+                        border: 1px solid rgba(0, 0, 0, 0.06);
+                        font-size: 11px;
+                    }
+
+                    .field-name {
+                        font-weight: 600;
+                        color: #64748B;
+                        width: 35%;
+                    }
+
+                    .field-val-new {
+                        font-weight: 700;
+                        color: #10B981;
+                    }
+
+                    .field-val-old {
+                        color: #94A3B8;
+                        text-decoration: line-through;
+                    }
+                }
+            }
+
+            .ara-approval-actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .ara-btn-approve {
+                    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+                    color: #FFFFFF;
+                    font-weight: 700;
+                    font-size: 12px;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 6px 14px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+                    transition: transform 0.15s ease;
+
+                    &:hover {
+                        transform: translateY(-1px);
+                    }
+                }
+
+                .ara-btn-reject {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: #DC2626;
+                    border: 1px solid rgba(239, 68, 68, 0.25);
+                    font-weight: 600;
+                    font-size: 12px;
+                    border-radius: 8px;
+                    padding: 6px 12px;
+                    cursor: pointer;
+                    transition: background 0.15s ease;
+
+                    &:hover {
+                        background: #FEE2E2;
+                    }
+                }
+            }
+        }
+
+        /* Typing indicator */
+        .ara-typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 14px;
+            width: fit-content;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+            .dot {
+                width: 6px;
+                height: 6px;
+                background: #7B68EE;
+                border-radius: 50%;
+                animation: araTyping 1.4s infinite ease-in-out both;
+
+                &:nth-child(1) { animation-delay: -0.32s; }
+                &:nth-child(2) { animation-delay: -0.16s; }
+            }
+        }
+    }
+
+    @keyframes araTyping {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+
+    /* Upload Preview Tray */
+    .ara-attachment-preview-tray {
+        padding: 6px 18px;
+        display: flex;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.6);
+        border-top: 1px solid var(--ara-copilot-border-subtle);
+
+        .ara-preview-chip {
+            background: #FFFFFF;
+            border: 1px solid rgba(244, 114, 182, 0.4);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: #7C3AED;
+
+            .remove-att {
+                cursor: pointer;
+                color: #94A3B8;
+                &:hover { color: #EF4444; }
+            }
+        }
+    }
+
+    /* Input Footer */
+    .ara-copilot-input-footer {
+        padding: 12px 18px 16px 18px;
+        background: rgba(255, 255, 255, 0.85);
+        border-top: 1px solid var(--ara-copilot-border-subtle);
+        flex-shrink: 0;
+
+        .ara-input-box-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 6px 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+            &:focus-within {
+                border-color: #7B68EE;
+                box-shadow: 0 0 0 3px rgba(123, 104, 238, 0.15);
+            }
+
+            .ara-attach-btn {
+                background: none;
+                border: none;
+                color: #94A3B8;
+                font-size: 16px;
+                padding: 6px;
+                cursor: pointer;
+                transition: color 0.15s ease;
+
+                &:hover {
+                    color: #7C3AED;
+                }
+            }
+
+            .ara-chat-textarea {
+                flex: 1;
+                border: none;
+                outline: none;
+                resize: none;
+                font-size: 13px;
+                color: var(--ara-copilot-text-pure);
+                max-height: 120px;
+                min-height: 24px;
+                line-height: 1.4;
+                padding: 4px 0;
+                background: transparent;
+
+                &::placeholder {
+                    color: #94A3B8;
+                }
+            }
+
+            .ara-send-btn {
+                background: var(--ara-copilot-accent-gradient);
+                color: #FFFFFF;
+                border: none;
+                border-radius: 12px;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: transform 0.15s ease, opacity 0.15s ease;
+                box-shadow: 0 2px 6px var(--ara-copilot-accent-glow);
+
+                &:hover:not(:disabled) {
+                    transform: scale(1.05);
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}

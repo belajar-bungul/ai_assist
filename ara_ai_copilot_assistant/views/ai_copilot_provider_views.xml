@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- AI Provider List View -->
+    <record id="view_ai_copilot_provider_tree" model="ir.ui.view">
+        <field name="name">ai.copilot.provider.list</field>
+        <field name="model">ai.copilot.provider</field>
+        <field name="arch" type="xml">
+            <list string="AI Providers" decoration-success="is_default == True" decoration-muted="is_active == False">
+                <field name="name"/>
+                <field name="provider_type" widget="badge"/>
+                <field name="model"/>
+                <field name="is_tested" widget="boolean" string="Tested"/>
+                <field name="is_default" widget="boolean_toggle"/>
+                <field name="is_active" widget="boolean_toggle"/>
+                <button name="action_test_connection" type="object" string="Test Connection" icon="fa-bolt" class="btn-sm btn-secondary"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- AI Provider Form View -->
+    <record id="view_ai_copilot_provider_form" model="ir.ui.view">
+        <field name="name">ai.copilot.provider.form</field>
+        <field name="model">ai.copilot.provider</field>
+        <field name="arch" type="xml">
+            <form string="AI Provider Configuration">
+                <header>
+                    <button name="action_test_connection" type="object" string="⚡ Test Connection" class="btn-primary" icon="fa-plug"/>
+                    <button name="action_set_as_default" type="object" string="⭐ Set as Default Provider" class="btn-secondary" invisible="is_default == True"/>
+                    <field name="is_default" widget="boolean_button" options="{'terminology': {'string_true': 'Default Active', 'string_false': 'Not Default'}}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Provider Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Google Gemini Pro"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Model &amp; Authentication">
+                            <field name="provider_type"/>
+                            <field name="model"/>
+                            <field name="api_key" password="True" placeholder="Paste your API key here..."/>
+                            <field name="api_base" placeholder="Leave empty for official endpoint"/>
+                        </group>
+                        <group string="Parameters &amp; Capabilities">
+                            <field name="temperature" widget="float" options="{'step': 0.1}"/>
+                            <field name="max_tokens"/>
+                            <field name="supports_multimodal"/>
+                            <field name="supports_tools"/>
+                            <field name="is_active"/>
+                            <field name="is_tested" readonly="1" widget="boolean"/>
+                            <field name="last_tested_date" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ai_copilot_provider" model="ir.actions.act_window">
+        <field name="name">AI Providers</field>
+        <field name="res_model">ai.copilot.provider</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure your AI Providers (Google Gemini, OpenAI, Claude, NVIDIA, OpenRouter).
+            </p>
+        </field>
+    </record>
+</odoo>

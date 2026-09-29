@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ara_ai_copilot_assistant.ChatWindow">
+        <div class="ara-copilot-chat-container">
+
+            <!-- Chat Header -->
+            <div class="ara-copilot-header">
+                <div class="ara-copilot-header-info">
+                    <div class="ara-copilot-avatar">
+                        <svg class="ara-bot-icon" viewBox="0 0 24 24">
+                            <path d="M12 2v3"/>
+                            <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                            <rect x="4" y="6" width="16" height="13" rx="4"/>
+                            <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                            <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                            <line x1="9" y1="16" x2="15" y2="16"/>
+                            <path d="M2 11v3"/>
+                            <path d="M22 11v3"/>
+                        </svg>
+                    </div>
+                    <div class="ara-copilot-details">
+                        <span class="ara-copilot-name" t-esc="state.threadName || 'Ara AI Copilot'"/>
+                        <div class="ara-model-selector-container" t-if="state.availableProviders and state.availableProviders.length > 0">
+                            <i class="fa fa-bolt ara-model-bolt-icon"/>
+                            <select class="ara-model-select" t-on-change="onProviderSelect" title="Select Tested AI Model">
+                                <t t-foreach="state.availableProviders" t-as="prov" t-key="prov.id">
+                                    <option t-att-value="prov.id" t-att-selected="state.providerInfo and state.providerInfo.id === prov.id">
+                                        <t t-esc="prov.name"/> (<t t-esc="prov.model"/>)
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <span class="ara-copilot-model-badge" t-elif="state.providerInfo">
+                            <i class="fa fa-bolt me-1"/>
+                            <t t-esc="state.providerInfo.name"/> (<t t-esc="state.providerInfo.model"/>)
+                        </span>
+                    </div>
+                </div>
+                <div class="ara-copilot-header-actions">
+                    <button t-if="state.activeThreadId"
+                            t-attf-class="ara-header-btn ara-star-header-btn #{state.isFavorite ? 'active-star' : ''}"
+                            t-att-title="state.isFavorite ? 'Remove Favorite' : 'Mark as Favorite'"
+                            t-on-click="toggleCurrentFavorite">
+                        <i t-attf-class="fa #{state.isFavorite ? 'fa-star text-warning' : 'fa-star-o'}"/>
+                    </button>
+                    <button class="ara-header-btn" title="New Chat" t-on-click="createNewChat">
+                        <i class="fa fa-plus"/>
+                    </button>
+                    <button t-if="state.activeThreadId and state.messages.length > 0" class="ara-header-btn ara-delete-header-btn" title="Delete Chat Session" t-on-click="deleteCurrentChat">
+                        <i class="fa fa-trash"/>
+                    </button>
+                    <button t-if="props.isDrawer and props.onClose" class="ara-header-btn" title="Close" t-on-click="props.onClose">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Smart Context Awareness Bar -->
+            <div t-if="state.currentContext and state.currentContext.resModel" class="ara-context-pill-bar">
+                <i class="fa fa-crosshairs"/>
+                <span>Active Screen Context:</span>
+                <span class="ara-context-tag">
+                    <strong t-esc="state.currentContext.resModel"/>
+                    <t t-if="state.currentContext.resId">
+                        #<t t-esc="state.currentContext.resId"/>
+                    </t>
+                    <t t-if="state.currentContext.displayName">
+                        (<t t-esc="state.currentContext.displayName"/>)
+                    </t>
+                </span>
+            </div>
+
+            <!-- Messages Scroll Area -->
+            <div class="ara-copilot-messages-area" t-ref="messagesArea">
+
+                <!-- Empty State & Quick Starters -->
+                <div t-if="state.messages.length === 0 and !state.isLoading" class="ara-copilot-empty-state">
+                    <div class="ara-empty-icon">
+                        <svg class="ara-bot-icon" viewBox="0 0 24 24">
+                            <path d="M12 2v3"/>
+                            <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                            <rect x="4" y="6" width="16" height="13" rx="4"/>
+                            <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                            <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                            <line x1="9" y1="16" x2="15" y2="16"/>
+                            <path d="M2 11v3"/>
+                            <path d="M22 11v3"/>
+                        </svg>
+                    </div>
+                    <h3>How can I help you today?</h3>
+                    <p>Ask anything about your Odoo business data, generate real-time financial statements, or safely create and update records.</p>
+
+                    <div class="ara-quick-starters">
+                        <button class="ara-starter-chip" t-on-click="() => this.sendMessage('Generate a summary of current month Profit and Loss report')">
+                            📊 Monthly Profit &amp; Loss
+                        </button>
+                        <button class="ara-starter-chip" t-on-click="() => this.sendMessage('Show all unpaid customer invoices')">
+                            📄 Unpaid Invoices
+                        </button>
+                        <button class="ara-starter-chip" t-on-click="() => this.sendMessage('Check products with stock below reorder point')">
+                            📦 Low Stock Products
+                        </button>
+                        <button class="ara-starter-chip" t-on-click="() => this.sendMessage('Help me create a new customer contact')">
+                            🤝 Create New Contact
+                        </button>
+                        <button class="ara-starter-chip" t-on-click="() => this.sendMessage('Show aged receivables summary report')">
+                            📈 Aged Receivables
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages List -->
+                <t t-foreach="state.messages" t-as="msg" t-key="msg.id">
+                    <div t-attf-class="ara-message-row #{msg.role}">
+                        <div t-if="msg.role === 'assistant'" class="ara-msg-avatar">
+                            <svg class="ara-bot-icon" viewBox="0 0 24 24">
+                                <path d="M12 2v3"/>
+                                <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                                <rect x="4" y="6" width="16" height="13" rx="4"/>
+                                <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                                <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                                <line x1="9" y1="16" x2="15" y2="16"/>
+                                <path d="M2 11v3"/>
+                                <path d="M22 11v3"/>
+                            </svg>
+                        </div>
+
+                        <div class="ara-message-bubble">
+                            <!-- Text Content: plain text for user, clean parsed markdown for assistant -->
+                            <div t-if="msg.role === 'user'" class="ara-msg-text user-text" t-esc="msg.content"/>
+                            <div t-else="" class="ara-msg-text assistant-text" t-out="renderMarkdown(msg.content)" t-on-click="onMessageContentClick"/>
+
+                            <!-- Copy to Clipboard Button -->
+                            <div class="ara-msg-actions-bar" t-if="msg.content">
+                                <button class="ara-copy-msg-btn" t-on-click="() => this.copyMessageContent(msg)" title="Copy message">
+                                    <i t-attf-class="fa #{msg.isCopied ? 'fa-check text-success' : 'fa-clone'}"/>
+                                    <span t-if="msg.isCopied" class="ara-copied-badge text-success">Copied!</span>
+                                    <span t-else="" class="ara-copy-label">Copy</span>
+                                </button>
+                            </div>
+
+                            <!-- Multimodal Attachments Pill -->
+                            <div t-if="msg.attachments and msg.attachments.length" class="ara-msg-attachments">
+                                <t t-foreach="msg.attachments" t-as="att" t-key="att.id">
+                                    <a t-att-href="att.url" target="_blank" class="ara-att-pill">
+                                        <i class="fa fa-paperclip"/>
+                                        <t t-esc="att.name"/>
+                                    </a>
+                                </t>
+                            </div>
+
+                            <!-- Built-in Enterprise Approval Step Card -->
+                            <div t-if="msg.proposal" t-attf-class="ara-approval-card #{msg.approval_state}">
+                                <div class="ara-approval-header">
+                                    <div class="ara-approval-title">
+                                        <i class="fa fa-shield-halved text-warning"/>
+                                        <span>Data Change Proposal</span>
+                                    </div>
+                                    <span t-attf-class="ara-approval-status-badge #{msg.approval_state}">
+                                        <t t-if="msg.approval_state === 'pending'">Pending Approval</t>
+                                        <t t-elif="msg.approval_state === 'approved'">Approved</t>
+                                        <t t-elif="msg.approval_state === 'rejected'">Canceled</t>
+                                    </span>
+                                </div>
+
+                                <div class="ara-approval-body">
+                                    <div class="fw-bold mb-1" t-esc="msg.proposal.summary"/>
+                                    <div class="text-muted small d-flex align-items-center flex-wrap gap-2">
+                                        <span>Model: <code t-esc="msg.proposal.model"/></span>
+                                        <t t-if="msg.proposal.res_id">
+                                            <span>| Record ID: #<strong t-esc="msg.proposal.res_id"/></span>
+                                            <a href="#" class="ara-proof-link ms-2" t-on-click.prevent="() => this.openRecordLink(msg.proposal.model, msg.proposal.res_id)">
+                                                <i class="fa fa-external-link me-1"/> Open Record ↗
+                                            </a>
+                                        </t>
+                                    </div>
+
+                                    <!-- Values Diff Table -->
+                                    <table t-if="msg.proposal.values" class="ara-diff-table">
+                                        <t t-foreach="Object.keys(msg.proposal.values)" t-as="fName" t-key="fName">
+                                            <tr>
+                                                <td class="field-name" t-esc="fName"/>
+                                                <td t-if="msg.proposal.old_values and msg.proposal.old_values[fName] !== undefined" class="field-val-old" t-esc="formatProposalVal(msg.proposal.old_values[fName])"/>
+                                                <td class="field-val-new" t-esc="formatProposalVal(msg.proposal.values[fName])"/>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </div>
+
+                                <!-- Action Buttons (Only for pending) -->
+                                <div t-if="msg.approval_state === 'pending'" class="ara-approval-actions">
+                                    <button class="ara-btn-approve" t-on-click="() => this.approveProposal(msg)">
+                                        <i class="fa fa-check"/> Approve &amp; Execute
+                                    </button>
+                                    <button class="ara-btn-reject" t-on-click="() => this.rejectProposal(msg)">
+                                        <i class="fa fa-times"/> Reject
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Typing indicator -->
+                <div t-if="state.isSending" class="ara-message-row assistant">
+                    <div class="ara-msg-avatar">
+                        <svg class="ara-bot-icon" viewBox="0 0 24 24">
+                            <path d="M12 2v3"/>
+                            <circle cx="12" cy="2" r="1" fill="currentColor"/>
+                            <rect x="4" y="6" width="16" height="13" rx="4"/>
+                            <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                            <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                            <line x1="9" y1="16" x2="15" y2="16"/>
+                            <path d="M2 11v3"/>
+                            <path d="M22 11v3"/>
+                        </svg>
+                    </div>
+                    <div class="ara-typing-indicator">
+                        <div class="dot"/>
+                        <div class="dot"/>
+                        <div class="dot"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Upload Attachment Preview Tray -->
+            <div t-if="state.pendingAttachments.length" class="ara-attachment-preview-tray">
+                <t t-foreach="state.pendingAttachments" t-as="pAtt" t-key="pAtt.id">
+                    <div class="ara-preview-chip">
+                        <i class="fa fa-file"/>
+                        <span t-esc="pAtt.name"/>
+                        <span class="remove-att" t-on-click="() => this.removePendingAttachment(pAtt_index)">×</span>
+                    </div>
+                </t>
+            </div>
+
+            <!-- Input Box Footer -->
+            <div class="ara-copilot-input-footer">
+                <div class="ara-input-box-wrapper">
+                    <!-- Hidden file picker -->
+                    <input type="file" t-ref="fileInput" class="d-none" t-on-change="onFileSelected" accept="image/*,.pdf,.csv,.txt,.json,.xlsx"/>
+
+                    <button class="ara-attach-btn" title="Upload Image / PDF / Doc" t-on-click="triggerFileInput">
+                        <i class="fa fa-paperclip"/>
+                    </button>
+
+                    <textarea
+                        class="ara-chat-textarea"
+                        placeholder="Ask AI Copilot anything, request actions or upload files (Press Enter to send)..."
+                        t-model="state.inputText"
+                        t-on-keydown="onTextareaKeyDown"
+                        rows="1"
+                    />
+
+                    <button
+                        class="ara-send-btn"
+                        title="Send Message"
+                        t-att-disabled="state.isSending or (!state.inputText.trim() and state.pendingAttachments.length === 0)"
+                        t-on-click="() => this.sendMessage()"
+                    >
+                        <i class="fa fa-paper-plane"/>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </t>
+
+</templates>
