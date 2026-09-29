@@ -18,7 +18,7 @@ Key Features & Highlights:
 * **Multimodal AI:** Upload images, screenshots, scanned receipts, and documents with instant OCR analysis.
 * **RAG & Semantic Document Search:** Chunked full-text and semantic search across all business attachments.
 * **Smart Navigation & Context Awareness:** Automatically senses the current active screen, model, and record ID.
-* **5+ AI Providers:** Google Gemini (Gemini 2.5 Flash / Pro), OpenAI (GPT-4o), Anthropic Claude, NVIDIA NIM, and OpenRouter.
+* **5+ AI Providers:** Google Gemini (gemini-flash-latest / Pro), OpenAI (GPT-4o), Anthropic Claude, NVIDIA NIM, and OpenRouter.
 * **Modern Porcelain Pastel Aesthetic:** Luxurious UI inspired by Ara Dashboard with gentle blush pink and butter yellow porcelain gradients.
 * **Dual Display Mode:** Fast Systray Drawer accessible from any screen + Fullscreen Dedicated AI Workspace.
 * **Enterprise Audit Trail:** Comprehensive logging of all AI queries, proposal approvals, and executions.
