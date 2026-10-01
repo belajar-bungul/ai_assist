@@ -26,7 +26,7 @@ Key Features & Highlights:
     'author': 'ARA SOFT',
     'website': 'https://www.arasoft.id',
     'license': 'OPL-1',
-    'price': 59.99,
+    'price': 46.99,
     'currency': 'USD',
     'depends': [
         'base',
