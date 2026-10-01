@@ -42,7 +42,7 @@
                             <field name="result" widget="text"/>
                         </page>
                         <page string="Proposal Payload">
-                            <field name="payload" widget="ace" options="{'mode': 'json'}"/>
+                            <field name="payload" widget="code" options="{'mode': 'json'}"/>
                         </page>
                         <page string="Error Log" invisible="not error_message">
                             <field name="error_message" widget="text"/>

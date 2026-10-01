@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record model="res.groups.privilege" id="res_groups_privilege_ai_copilot">
+    <record model="ir.module.category" id="module_category_ai_copilot">
         <field name="name">Ara AI Copilot</field>
         <field name="sequence">30</field>
-        <field name="category_id" ref="base.module_category_productivity"/>
+        <field name="parent_id" ref="base.module_category_productivity"/>
     </record>
 
     <record id="group_ai_copilot_user" model="res.groups">
         <field name="name">User</field>
-        <field name="sequence">10</field>
-        <field name="privilege_id" ref="res_groups_privilege_ai_copilot"/>
+        <field name="category_id" ref="module_category_ai_copilot"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
     <record id="group_ai_copilot_manager" model="res.groups">
         <field name="name">Administrator</field>
-        <field name="sequence">20</field>
-        <field name="privilege_id" ref="res_groups_privilege_ai_copilot"/>
-        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="category_id" ref="module_category_ai_copilot"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         <field name="implied_ids" eval="[(4, ref('group_ai_copilot_user'))]"/>
     </record>
 

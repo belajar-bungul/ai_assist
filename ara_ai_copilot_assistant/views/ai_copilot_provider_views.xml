@@ -26,7 +26,7 @@
                 <header>
                     <button name="action_test_connection" type="object" string="⚡ Test Connection" class="btn-primary" icon="fa-plug"/>
                     <button name="action_set_as_default" type="object" string="⭐ Set as Default Provider" class="btn-secondary" invisible="is_default == True"/>
-                    <field name="is_default" widget="boolean_button" options="{'terminology': {'string_true': 'Default Active', 'string_false': 'Not Default'}}"/>
+                    <field name="is_default" widget="boolean_toggle"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

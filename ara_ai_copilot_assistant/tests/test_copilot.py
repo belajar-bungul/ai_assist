@@ -55,6 +55,8 @@ class TestAraAiCopilot(TransactionCase):
 
     def test_04_financial_report_tool(self):
         """Verify financial report execution."""
+        if 'account.move.line' not in self.env:
+            return
         # Test P&L
         pl_res = self.tool_model.execute_tool('odoo_financial_report', {
             'report_type': 'profit_loss',
@@ -189,6 +191,8 @@ class TestAraAiCopilot(TransactionCase):
 
     def test_08_proactive_sales_order_auto_contact_and_proof(self):
         """Verify end-to-end Sales Order creation with auto contact creation, lines, and proof URL."""
+        if 'sale.order' not in self.env:
+            return
         # Ensure contact doesn't exist before test
         existing = self.env['res.partner'].search([('name', '=', 'PT ABC Penawaran Baru')])
         if existing:
@@ -352,7 +356,7 @@ class TestAraAiCopilot(TransactionCase):
             'name': 'Sales Staff User',
             'login': 'sales_staff_rbac_test',
             'email': 'sales_rbac@example.com',
-            'group_ids': [(6, 0, group_ids)],
+            'groups_id': [(6, 0, group_ids)],
         })
 
         # 2. As sales user, attempt to call odoo_financial_report for Profit and Loss

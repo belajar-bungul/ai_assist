@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 class AraCopilotController(http.Controller):
 
-    @http.route('/ara_copilot/init', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/init', type='json', auth='user')
     def copilot_init(self, context_info=None):
         """Initializes Copilot state for the current session."""
         env = request.env
@@ -72,7 +72,7 @@ class AraCopilotController(http.Controller):
             'currency_symbol': env.company.currency_id.symbol,
         }
 
-    @http.route('/ara_copilot/send_message', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/send_message', type='json', auth='user')
     def copilot_send_message(self, thread_id, content, attachment_ids=None, context_info=None):
         """Processes a chat message from the user."""
         env = request.env
@@ -87,7 +87,7 @@ class AraCopilotController(http.Controller):
             _logger.exception("AI Copilot Message processing error: %s", str(e))
             return {'error': str(e)}
 
-    @http.route('/ara_copilot/create_thread', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/create_thread', type='json', auth='user')
     def copilot_create_thread(self, name=None):
         """Creates a new conversation thread."""
         env = request.env
@@ -100,7 +100,7 @@ class AraCopilotController(http.Controller):
             'thread_data': thread.get_thread_data(),
         }
 
-    @http.route('/ara_copilot/get_thread', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/get_thread', type='json', auth='user')
     def copilot_get_thread(self, thread_id):
         """Loads messages of a specific thread."""
         env = request.env
@@ -109,7 +109,7 @@ class AraCopilotController(http.Controller):
             return {'error': _("Thread not found.")}
         return thread.get_thread_data()
 
-    @http.route('/ara_copilot/delete_thread', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/delete_thread', type='json', auth='user')
     def copilot_delete_thread(self, thread_id, password=""):
         """Deletes a conversation thread after verifying current user password."""
         env = request.env
@@ -128,7 +128,7 @@ class AraCopilotController(http.Controller):
             return {'success': True}
         return {'error': _("Thread not found or permission denied.")}
 
-    @http.route('/ara_copilot/toggle_favorite_thread', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/toggle_favorite_thread', type='json', auth='user')
     def copilot_toggle_favorite_thread(self, thread_id):
         """Toggles favorite status of a conversation thread."""
         env = request.env
@@ -138,7 +138,7 @@ class AraCopilotController(http.Controller):
             return {'success': True, 'is_favorite': thread.is_favorite}
         return {'error': _("Thread not found.")}
 
-    @http.route('/ara_copilot/set_thread_provider', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/set_thread_provider', type='json', auth='user')
     def copilot_set_thread_provider(self, thread_id, provider_id):
         """Switches AI model provider for the conversation thread."""
         env = request.env
@@ -160,7 +160,7 @@ class AraCopilotController(http.Controller):
             }
         }
 
-    @http.route('/ara_copilot/get_available_providers', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/get_available_providers', type='json', auth='user')
     def copilot_get_available_providers(self):
         """Returns verified AI providers that passed connection test."""
         providers = request.env['ai.copilot.provider'].get_tested_providers()
@@ -172,7 +172,7 @@ class AraCopilotController(http.Controller):
             'is_default': p.is_default,
         } for p in providers]
 
-    @http.route('/ara_copilot/search_threads', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/search_threads', type='json', auth='user')
     def copilot_search_threads(self, query=""):
         """Searches conversation threads by title and message contents."""
         env = request.env
@@ -211,7 +211,7 @@ class AraCopilotController(http.Controller):
             'write_date': str(t.write_date)
         } for t in threads]
 
-    @http.route('/ara_copilot/approve_proposal', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/approve_proposal', type='json', auth='user')
     def copilot_approve_proposal(self, thread_id, message_id):
         """Executes an approved proposal."""
         env = request.env
@@ -224,7 +224,7 @@ class AraCopilotController(http.Controller):
             _logger.exception("Error executing proposal approval: %s", str(e))
             return {'error': str(e)}
 
-    @http.route('/ara_copilot/reject_proposal', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/reject_proposal', type='json', auth='user')
     def copilot_reject_proposal(self, thread_id, message_id):
         """Rejects a proposed action."""
         env = request.env
@@ -237,7 +237,7 @@ class AraCopilotController(http.Controller):
             _logger.exception("Error rejecting proposal: %s", str(e))
             return {'error': str(e)}
 
-    @http.route('/ara_copilot/upload_attachment', type='jsonrpc', auth='user')
+    @http.route('/ara_copilot/upload_attachment', type='json', auth='user')
     def copilot_upload_attachment(self, name, data_base64, mimetype=None):
         """Uploads an attachment file for multimodal interaction."""
         env = request.env

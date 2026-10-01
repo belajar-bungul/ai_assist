@@ -1,6 +1,6 @@
-# Ara AI Copilot Assistant - Modern Enterprise AI for Odoo 19
+# Ara AI Copilot Assistant - Modern Enterprise AI for Odoo 18
 
-Transform your enterprise operations with Ara AI Copilot Assistant: an autonomous, multi-provider AI assistant embedded directly into Odoo 19.
+Transform your enterprise operations with Ara AI Copilot Assistant: an autonomous, multi-provider AI assistant embedded directly into Odoo 18.
 
 ## Highlights
 - **Search & Read Anything**: Natural language business data queries with instant answers.

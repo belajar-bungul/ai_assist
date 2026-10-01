@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Ara AI Copilot Assistant - Multi-Provider Enterprise AI',
-    'version': '19.0.1.0.0',
+    'version': '18.0.1.0.0',
     'category': 'Productivity/Artificial Intelligence',
-    'summary': 'Next-Gen Enterprise AI Copilot for Odoo 19: Search & Read Anything, Safe Approval Workflows, Financial Reporting, Multimodal Vision, RAG Document Search, Smart Context Awareness & 5+ AI Providers',
+    'summary': 'Next-Gen Enterprise AI Copilot for Odoo 18: Search & Read Anything, Safe Approval Workflows, Financial Reporting, Multimodal Vision, RAG Document Search, Smart Context Awareness & 5+ AI Providers',
     'description': """
-Ara AI Copilot Assistant for Odoo 19
+Ara AI Copilot Assistant for Odoo 18
 ====================================
 The enterprise AI assistant that understands your business data and takes action through natural conversation.
 
